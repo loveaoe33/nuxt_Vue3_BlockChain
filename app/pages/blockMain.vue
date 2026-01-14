@@ -1,8 +1,8 @@
 <template>
 
 
- <header class="card">
-        <div class="header-content">
+ <header class="blockmain_card">
+        <div class="blockmain_header-content">
             <h1>🌐 CORE V3.1 - 區塊鏈控制台</h1>
             <div id="auth-status">
                 <span>未偵測到使用者連線</span>
@@ -15,9 +15,9 @@
         </p>
     </header>
 
-    <div class="container">
+    <div class="blockmain_container">
         
-        <div class="main-content">
+        <div class="blockmain-content">
             <div class="card">
                 <h2>💸 節點交易介面</h2>
                 <label for="sender-account">發送帳號 (From):</label>
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div class="side-content">
+        <div class="blockmain-side-content">
             <div class="card">
                 <h2>⛏️ 現行區塊串流 <span id="current-block-number">#12345</span></h2>
                 <div class="block-display" id="current-block-data">
@@ -47,7 +47,7 @@
         </div>
         
         <div class="full-width">
-            <div class="card">
+            <div class="blockmain-card">
                 <h2>🔎 數據鏈條調閱</h2>
                 <label for="query-input">區塊索引號或交易 Hash:</label>
                 <div style="display: flex; gap: 10px;">

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="bockadmin_container">
     <h1>歡迎來到 Nuxt 3 測試頁面</h1>
     <p>點擊次數：{{ count }}</p>
     <button @click="count++">點我增加</button>
