@@ -44,5 +44,18 @@
 3. 📄 **交易明細彈窗 Modal**
    - **多層次彈窗架構**：在查詢列表中新增第二層檢視用的明細 Modal，支援點擊單筆紀錄展開詳細資訊（Hash、時間、類型、狀態）。
    - **互動體驗優化**：利用計算屬性與狀態綁定處理資料選取，確保雙層 Modal 的 `z-index` 堆疊正確覆蓋，並維持科技感 UI 一致性。
+
+## 📅 2026.05.27 更新日誌：全域狀態擴充與模組化彈窗 (Modal) 系統開發
+本次更新全面導入了「模組化元件」的開發模式，將各項獨立功能封裝成高替換性的 Modal，並大幅擴充了 Pinia 的狀態管理結構。
+
+1. 🧩 **模組化彈窗 (Modal) 架構設計**
+   - **高替換性元件**：將「編輯帳號 (`accountEditModal`)」、「特約群組設定 (`specialStoreModal`)」、「約定帳戶設定 (`agreedAccountModal`)」及「VIP 群組管理 (`manageVipGroupModal`)」全面抽離為獨立 Vue 元件，隨插即用。
+   - **SSR 渲染優化**：統一導入 `<ClientOnly>` 與 `<Teleport to="body">` 結構，完美解決 Nuxt 3 伺服器端渲染 (SSR) 造成的 Hydration Mismatch 警告與版面層級干擾。
+2. 📦 **Pinia Store 狀態與型別擴充**
+   - **全域資料綁定**：在 `walletStore` 中新增 `userInfo`、`companies`、`vipGroups` 與 `agreedAccounts` 等核心業務狀態，並預載假資料以供前端開發測試。
+   - **TypeScript 型別定義**：嚴格定義 `Company`、`VipGroup`、`VipAccount` 等 Interface 介面，消滅物件屬性遺漏造成的 TS 報錯，提升開發體驗。
+3. 🔗 **約定帳戶與特約群組聯動系統**
+   - **多層級下拉選單**：優化 `specialStoreModal` 的操作邏輯，使用者可直接從系統預設的「合作公司」與使用者自行定義的「約定帳戶」中，透過下拉選單綁定至自訂的 Group 中。
+   - **資料流同步**：前端輸入的表單資料統一由單向資料流寫回 Store，並實時連動至 `blockMain.vue` 主控台的接收帳號選單中，完成完整的業務邏輯閉環。
    - **操作整合**：內建重啟連線的模擬按鈕 (`@click`) 與底部的系統版本/開發者資訊區塊。
 

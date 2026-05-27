@@ -1,0 +1,94 @@
+.account-edit-modal {
+  max-width: 650px;
+  width: 90%;
+  background: rgba(17, 24, 39, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  color: #f8fafc;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.account-edit-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.account-edit-modal .modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #00f2fe;
+}
+
+.account-edit-modal .form-group {
+  margin-bottom: 15px;
+  flex: 1;
+}
+
+.account-edit-modal .form-group-row {
+  display: flex;
+  gap: 15px;
+}
+
+@media (max-width: 600px) {
+  .account-edit-modal .form-group-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.account-edit-modal label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.account-edit-modal input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(3, 7, 18, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.account-edit-modal input:focus {
+  outline: none;
+  border-color: #00f2fe;
+  box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+  background: rgba(10, 16, 30, 0.9);
+}
+
+.account-edit-modal input.readonly-input {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
+.account-edit-modal .save-btn {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  color: #020617;
+}
+
+.account-edit-modal .cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+}
+
+.account-edit-modal .cancel-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
