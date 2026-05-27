@@ -1,0 +1,19 @@
+.special-store-modal { max-width: 700px; max-height: 90vh; overflow-y: auto; }
+.confirm-modal { max-width: 400px; }
+.form-group-row { display: flex; gap: 10px; margin-bottom: 10px; }
+.form-group-row input { flex: 1; margin-bottom: 0; padding: 10px 14px; font-size: 0.95rem; }
+.modal-footer { display: flex; gap: 12px; justify-content: flex-end; }
+.action-btn { padding: 10px 16px; font-size: 0.9rem; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+.action-btn:hover { transform: translateY(-2px); }
+.add-btn { background: #3b82f6; color: white; }
+.verify-btn { background: #f59e0b; color: white; }
+.close-btn-action { background: #ef4444; color: white; }
+.delete-btn { background: #ef4444; color: white; padding: 6px 10px; font-size: 0.8rem; }
+.submit-btn { background: #10b981; color: white; }
+.group-section { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+.group-header { display: flex; align-items: center; font-size: 1.1rem; color: #e2e8f0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; }
+.table-container { overflow-x: auto; }
+.history-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.history-table th { background: rgba(255, 255, 255, 0.03); color: #94a3b8; padding: 10px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.history-table td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #e2e8f0; vertical-align: middle; }
+.hash-text { font-family: 'JetBrains Mono', Consolas, monospace; color: var(--secondary-color); background: rgba(79, 172, 254, 0.1); padding: 4px 8px; border-radius: 4px; word-break: break-all; }
