@@ -1,25 +1,34 @@
 import { defineStore } from "pinia";
+// import { blockchainService, type TransferPayload, type TransferResult } from "~/services/blockchainService";
 
 export interface Company {
   id: string;
   name: string;
 }
 
-export interface VipAccount {
+export interface VipAddress {
   name: string;
   address: string;
+  account: string;
+  email: string;
+  phone: string;
+  physicalAddress: string;
 }
 
-export interface VipGroup {
+export interface VipAccount {
   id: string;
   companyId: string;
   name: string;
-  accounts: VipAccount[];
+  accounts: VipAddress[];
 }
 
 export interface AgreedAccount {
   name: string;
   address: string;
+  account: string;
+  email: string;
+  phone: string;
+  physicalAddress: string;
 }
 
 // stores/wallet.ts
@@ -41,27 +50,48 @@ export const useWalletStore = defineStore('wallet', {
       { id: 'comp_tech_vision', name: 'TechVision 科技集團' },
       { id: 'comp_global_link', name: 'GlobalLink 跨境物流' }
     ] as Company[],
-    vipGroups: [
+    vipAccounts: [
       {
-        id: 'group_1',
+        id: 'vip_1',
         companyId: 'comp_tech_vision',
-        name: '主要結算群組',
+        name: '主要結算特約帳號',
         accounts: [
-          { name: '主要結算帳戶 (Primary)', address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F' }
+          { 
+            name: '主要結算帳戶 (Primary)', 
+            address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+            account: 'primary_acc_01',
+            email: 'primary@techvision.com',
+            phone: '0911-111-111',
+            physicalAddress: '台北市信義區科技大道 1 號'
+          }
         ]
       },
       {
-        id: 'group_2',
+        id: 'vip_2',
         companyId: 'comp_global_link',
-        name: '物流應急群組',
+        name: '物流應急特約帳號',
         accounts: [
-          { name: '應急儲備帳戶 (Reserve)', address: '0x123f681646d4a755815f9cb19e1acc8565a0c2ac' }
+          { 
+            name: '應急儲備帳戶 (Reserve)', 
+            address: '0x123f681646d4a755815f9cb19e1acc8565a0c2ac',
+            account: 'reserve_acc_01',
+            email: 'reserve@global-link.com',
+            phone: '0922-222-222',
+            physicalAddress: '新北市板橋區物流路 2 號'
+          }
         ]
       }
-    ] as VipGroup[],
+    ] as VipAccount[],
     // 約定帳戶清單
     agreedAccounts: [
-      { name: '預設備用冷錢包', address: '0x8b323c12aa4d4a755815f9cb19e1acc8565a0c2ac' }
+      { 
+        name: '預設備用冷錢包', 
+        address: '0x8b323c12aa4d4a755815f9cb19e1acc8565a0c2ac',
+        account: 'cold_wallet_01',
+        email: 'cold@blockchain.com',
+        phone: '0933-333-333',
+        physicalAddress: '桃園市中壢區冷區 3 號'
+      }
     ] as AgreedAccount[]
   }),
   
@@ -85,6 +115,19 @@ export const useWalletStore = defineStore('wallet', {
       this.isConnected = false;
       this.walletAddress = '';
       this.balance = 0;
-    }
+    },
+    
+    // // 呼叫 Service 執行轉帳
+    // async sendTransaction(receiver: string, amount: number): Promise<TransferResult> {
+    //   const payload: TransferPayload = {
+    //     sender: this.walletAddress,
+    //     receiver: receiver,
+    //     amount: amount,
+    //     network: 'CORE_V3' // 可選的擴充欄位
+    //   };
+      
+    //   // 這裡直接調用剛寫好的 Service 封裝
+    //   return await blockchainService.executeTransfer(payload);
+    // }
   }
 })
