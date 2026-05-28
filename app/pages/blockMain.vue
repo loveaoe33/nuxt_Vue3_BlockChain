@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useWalletStore } from '~/stores/wallet'
 import QueryTransfer from './queryTransfer.vue'
 import '../css/blockMain.css'
@@ -20,16 +20,74 @@ const receiverAccount = ref<string>('')
 const transferAmount = ref<number | null>(null)
 const searchHash = ref<string>('')
 
+// 自動帶入登入者的錢包地址作為發送帳號
+watch(() => walletStore.walletAddress, (newAddress) => {
+  senderAccount.value = newAddress || ''
+}, { immediate: true })
+
+// 當錢包斷線時，自動清空表單已選擇的資料
+watch(() => walletStore.isConnected, (connected) => {
+  if (!connected) {
+    partnerCompany.value = ''
+    receiverAccount.value = ''
+  }
+})
+
+// === 動態計算連動的特約帳號清單 ===
+const availableVipAccounts = computed(() => {
+  if (!partnerCompany.value) return []
+  return walletStore.vipAccounts
+    // 1. 強制轉字串比對，避免型別不一致導致過濾失敗
+    .filter(g => String(g.companyId) === String(partnerCompany.value))
+    .flatMap(g => {
+      // 2. 確保 accounts 存在，並帶入外層特約帳號的名稱 (vipName) 供選單顯示
+      return (g.accounts || []).map(acc => ({
+        ...acc,
+        vipName: g.name
+      }))
+    })
+})
+
 // === 定義 Modal 彈窗的開關狀態 ===
 const showModal = ref<boolean>(false)
 const showAccountEditModal = ref<boolean>(false)
 const showSpecialStoreModal = ref<boolean>(false)
 
+// 接收帳號驗證狀態
+const receiverValidationMsg = ref<string>('')
+const isReceiverValid = ref<boolean>(false)
+
+// 監聽接收帳號變動，自動清除驗證訊息
+watch(receiverAccount, () => {
+  receiverValidationMsg.value = ''
+  isReceiverValid.value = false
+})
+
 // === 呼叫各種行為 (Actions) ===
-// 標註一般函式的回傳值為 void (代表不回傳任何東西)
-// 改為接收一個 accountToVerify 字串參數
-const verifyAccount = (accountToVerify: string): void => {
-  alert(`正在驗證帳號: ${accountToVerify || walletStore.walletAddress || '未輸入'}`)
+// 驗證接收帳號
+const verifyAccount = (): void => {
+  if (!receiverAccount.value) {
+    isReceiverValid.value = false
+    receiverValidationMsg.value = '⚠️ 請先輸入或選擇接收帳號'
+    return
+  }
+  
+  const addressToVerify = receiverAccount.value.trim().toLowerCase()
+  
+  // 在約定帳戶與特約帳戶中尋找該地址
+  let foundAccount = walletStore.agreedAccounts.find(a => a.address.toLowerCase() === addressToVerify)
+  if (!foundAccount) {
+    const allVipAccounts = walletStore.vipAccounts.flatMap(v => v.accounts)
+    foundAccount = allVipAccounts.find(a => a.address.toLowerCase() === addressToVerify)
+  }
+
+  if (foundAccount) {
+    isReceiverValid.value = true
+    receiverValidationMsg.value = `✅ 帳號正確 - 名稱: ${foundAccount.name} | Account: ${foundAccount.account || '未設定'}`
+  } else {
+    isReceiverValid.value = false
+    receiverValidationMsg.value = '❌ 找不到此接收帳號或非約定/特約帳戶'
+  }
 }
 
 const executeTransfer = (): void => {
@@ -37,8 +95,12 @@ const executeTransfer = (): void => {
     alert("❌ 請先點擊右上角連線錢包！")
     return
   }
-  if (!receiverAccount.value || !transferAmount.value) {
-    alert("⚠️ 請輸入接收帳號與正確的轉帳金額！")
+  if (!isReceiverValid.value) {
+    alert("⚠️ 接收帳號尚未確認或格式錯誤，請先點擊「帳號確認」！")
+    return
+  }
+  if (!transferAmount.value || transferAmount.value <= 0) {
+    alert("⚠️ 請輸入大於 0 的正確轉帳金額！")
     return
   }
   
@@ -82,29 +144,35 @@ const executeTransfer = (): void => {
                 <h2>💸 節點交易介面:{{ walletStore.shortAddress }} | 餘額: {{ walletStore.balance }}</h2>
                 
                 <label>特約合作公司 (Partner Company):</label>
-                <select id="company-select" class="vip-select" v-model="partnerCompany">
-                    <option value="">-- 選擇合作夥伴 --</option>
-                    <option value="tech_vision">TechVision 科技集團</option>
-                    <option value="global_link">GlobalLink 跨境物流</option>
+                <!-- 切換公司時，同時將已選擇的特約帳號清空 -->
+                <select id="company-select" class="vip-select" v-model="partnerCompany" @change="receiverAccount = ''" :disabled="!walletStore.isConnected" :style="{ opacity: walletStore.isConnected ? 1 : 0.7, cursor: walletStore.isConnected ? 'auto' : 'not-allowed' }">
+                    <option value="">{{ walletStore.isConnected ? '-- 選擇合作夥伴 --' : '-- 請先連線錢包 --' }}</option>
+                    <option v-for="comp in walletStore.companies" :key="comp.id" :value="comp.id">
+                        {{ comp.name }}
+                    </option>
                 </select>
 
                 <label>可選擇的特約帳號 (VIP Accounts):</label>
-                <select id="friend-select" class="vip-select" v-model="receiverAccount">
-                    <option value="">-- 請選擇特約帳號 --</option>
-                    <option value="0x71C7656EC7ab88b098defB751B7401B5f6d8976F">主要結算帳戶 (Primary)</option>
-                    <option value="0x123f681646d4a755815f9cb19e1acc8565a0c2ac">應急儲備帳戶 (Reserve)</option>
+                <select id="friend-select" class="vip-select" v-model="receiverAccount" :disabled="!walletStore.isConnected" :style="{ opacity: walletStore.isConnected ? 1 : 0.7, cursor: walletStore.isConnected ? 'auto' : 'not-allowed' }">
+                    <option value="">{{ walletStore.isConnected ? '-- 請選擇特約帳號 --' : '-- 請先連線錢包 --' }}</option>
+                    <option v-for="(acc, index) in availableVipAccounts" :key="index" :value="acc.address">
+                        [{{ acc.vipName }}] {{ acc.name }} ({{ acc.address.slice(0,10) }}...)
+                    </option>
                 </select>
 
-                <hr class="divider">d
+                <hr class="divider">
 
                 <label for="sender-account">發送帳號 (From):</label>
-                <div class="input-with-btn">
-                    <input type="text" id="sender-account" placeholder="請先登入或輸入地址" v-model="senderAccount">
-                    <button class="verify-btn" @click="verifyAccount(senderAccount)">帳號確認</button>
-                </div>
+                <input type="text" id="sender-account" placeholder="請先登入" v-model="senderAccount" disabled style="opacity: 0.7; cursor: not-allowed;">
 
                 <label for="receiver-account">接收帳號 (To):</label>
-                <input type="text" id="receiver-account" placeholder="輸入地址或從上方特約清單選取" v-model="receiverAccount">
+                <div class="input-with-btn" style="margin-bottom: 8px;">
+                    <input type="text" id="receiver-account" placeholder="輸入地址或從上方特約清單選取" v-model="receiverAccount" style="margin-bottom: 0;">
+                    <button class="verify-btn" @click="verifyAccount">帳號確認</button>
+                </div>
+                <div v-if="receiverValidationMsg" :style="{ color: isReceiverValid ? '#10b981' : '#ef4444', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '18px' }">
+                    {{ receiverValidationMsg }}
+                </div>
 
                 <label for="amount">轉帳金額 (AMOUNT):</label>
                 <input type="number" id="amount" placeholder="輸入 CORE 單位數量" min="0" step="0.0001" v-model="transferAmount">
