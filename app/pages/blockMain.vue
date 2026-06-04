@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useWalletStore } from '~/stores/wallet'
 import QueryTransfer from './queryTransfer.vue'
+import AccountResModal from './accountResModal.vue'
 import '../css/blockMain.css'
 
 const walletStore = useWalletStore()
@@ -52,6 +53,7 @@ const availableVipAccounts = computed(() => {
 const showModal = ref<boolean>(false)
 const showAccountEditModal = ref<boolean>(false)
 const showSpecialStoreModal = ref<boolean>(false)
+const showAccountResModal = ref<boolean>(false)
 
 // 接收帳號驗證狀態
 const receiverValidationMsg = ref<string>('')
@@ -108,6 +110,12 @@ const executeTransfer = (): void => {
   alert(`✅ 準備發起交易！\n發送方: ${walletStore.shortAddress}\n接收方: ${receiverAccount.value}\n金額: ${transferAmount.value} CORE`)
   // 實際應用時，這裡會呼叫： walletStore.sendTransaction(receiverAccount.value, transferAmount.value)
 }
+
+const handleUserRegister = (userData: any): void => {
+  console.log('取得的註冊資料：', userData)
+  showAccountResModal.value = false
+  alert('註冊成功！')
+}
 </script>
 
 <template>
@@ -124,12 +132,14 @@ const executeTransfer = (): void => {
                 <span v-else class="status-text">已連線: {{ walletStore.shortAddress }} | 餘額: {{ walletStore.balance }} CORE</span>
                 <div class="header-buttons">
                     <a href="admin_super.html" class="admin-link-btn">[管理員登入]</a>
+                    <button v-if="!walletStore.isConnected" class="login-btn" @click="showAccountResModal = true" style="background-color: #67c23a; border-color: #67c23a;">👤 註冊</button>
                     <button v-if="walletStore.isConnected" class="query-btn" @click="showAccountEditModal = true">📝 編輯帳號</button>
                     <button v-if="walletStore.isConnected" class="query-btn" @click="showSpecialStoreModal = true">⚙️ 編輯特約帳號</button>
                     <button v-if="walletStore.isConnected" class="query-btn" @click="showModal = true">📋 查詢交易紀錄</button>
                     <QueryTransfer :isOpen="showModal" @close="showModal = false" />
                     <AccountEditModal :isOpen="showAccountEditModal" @close="showAccountEditModal = false" />
                     <SpecialStoreModal :isOpen="showSpecialStoreModal" @close="showSpecialStoreModal = false" />
+                    <AccountResModal v-model:isVisible="showAccountResModal" @register="handleUserRegister" />
 
                     <button v-if="!walletStore.isConnected" class="login-btn" @click="handleLogin">登入/連線錢包</button>
                     <button v-else class="login-btn" @click="walletStore.disconnect()">中斷連線</button>
