@@ -1,0 +1,85 @@
+/* 基礎重置，讓畫面撐滿且無邊距 */
+.initLoading-page-wrapper {
+  margin: 0;
+  padding: 0;
+  background: #0f172a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.initLoading-container {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 節點群組容器 */
+.initLoading-node-cluster {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+/* 共用節點樣式 */
+.initLoading-node {
+  position: absolute;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 15px #38bdf8;
+}
+
+/* 中心主節點 */
+.initLoading-central {
+  width: 20px;
+  height: 20px;
+  top: 40px;
+  left: 40px;
+  animation: initLoading-pulse 2s infinite;
+}
+
+/* --- 不同軌道的動畫與設定 --- */
+
+/* 內圈軌道 (距離 30px) */
+.initLoading-orbit-inner-1 { width: 8px; height: 8px; top: 46px; left: 46px; animation: initLoading-orbit-close 2s linear infinite; }
+.initLoading-orbit-inner-2 { width: 8px; height: 8px; top: 46px; left: 46px; animation: initLoading-orbit-close 2s linear infinite reverse; animation-delay: -1s; }
+
+/* 中圈軌道 (距離 45px) */
+.initLoading-orbit-mid-1 { width: 10px; height: 10px; top: 45px; left: 45px; animation: initLoading-orbit-mid 3s linear infinite; }
+.initLoading-orbit-mid-2 { width: 10px; height: 10px; top: 45px; left: 45px; animation: initLoading-orbit-mid 3.5s linear infinite reverse; animation-delay: -1.5s; }
+
+/* 外圈軌道 (距離 65px) */
+.initLoading-orbit-outer-1 { width: 6px; height: 6px; top: 47px; left: 47px; animation: initLoading-orbit-far 4.5s linear infinite; }
+.initLoading-orbit-outer-2 { width: 6px; height: 6px; top: 47px; left: 47px; animation: initLoading-orbit-far 5s linear infinite reverse; animation-delay: -2s; }
+
+/* --- 動畫 Keyframes --- */
+@keyframes initLoading-pulse {
+  0% { transform: scale(1); opacity: 1; box-shadow: 0 0 15px #38bdf8; }
+  50% { transform: scale(1.5); opacity: 0.6; box-shadow: 0 0 30px #38bdf8; }
+  100% { transform: scale(1); opacity: 1; box-shadow: 0 0 15px #38bdf8; }
+}
+
+@keyframes initLoading-orbit-close {
+  from { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+}
+
+@keyframes initLoading-orbit-mid {
+  from { transform: rotate(0deg) translateX(45px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(45px) rotate(-360deg); }
+}
+
+@keyframes initLoading-orbit-far {
+  from { transform: rotate(0deg) translateX(65px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(65px) rotate(-360deg); }
+}
+
+.initLoading-loading-text {
+  color: #94a3b8;
+  margin-top: 40px; /* 稍微拉開一點距離以免外圈打到字 */
+  font-family: monospace;
+  letter-spacing: 2px;
+}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useWalletStore } from '~/stores/wallet'
+import '../css/editProfileModal.css'
 
 const props = defineProps<{ isOpen: boolean }>()
 const emit = defineEmits(['close'])
@@ -123,13 +124,3 @@ watch(() => props.isOpen, (newVal) => {
   </ClientOnly>
 </template>
 
-<style scoped>
-.profile-modal { max-width: 500px; }
-.form-group { margin-bottom: 6px; }
-.disabled-input { opacity: 0.5; cursor: not-allowed; }
-.modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
-.action-btn { padding: 10px 16px; font-size: 0.9rem; }
-.load-btn { background: #f59e0b; color: white; }
-.submit-btn { background: #10b981; color: white; }
-.close-btn-action { background: #ef4444; color: white; }
-</style>

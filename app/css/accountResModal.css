@@ -1,0 +1,123 @@
+.acc-res-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2020;
+}
+
+.acc-res-modal-content {
+  background: rgba(17, 24, 39, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.acc-res-modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+  color: #00f2fe;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.acc-res-form-group {
+  margin-bottom: 16px;
+}
+
+.acc-res-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.acc-res-form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(3, 7, 18, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.acc-res-form-group input:focus {
+  outline: none;
+  border-color: #00f2fe;
+  box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+  background: rgba(10, 16, 30, 0.9);
+}
+
+.acc-res-form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.acc-res-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.acc-res-btn-cancel,
+.acc-res-btn-submit {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acc-res-btn-cancel {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+}
+
+.acc-res-btn-cancel:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.acc-res-btn-cancel:active {
+  transform: translateY(1px);
+}
+
+.acc-res-btn-submit {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  border: none;
+  color: #020617;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+}
+
+.acc-res-btn-submit:hover {
+  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+  transform: translateY(-2px);
+}
+
+.acc-res-btn-submit:active {
+  transform: translateY(1px);
+}
